@@ -14,7 +14,7 @@ connectDb();
 app.use(express.json());
 
 
-app.use(cors('http://127.0.0.1/5173'))
+app.use(cors('http://127.0.0.1:5173'))
 
 app.get('/', (req, res) => {
     res.json('Api is running')

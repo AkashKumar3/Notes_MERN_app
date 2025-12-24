@@ -21,7 +21,7 @@ const LoginPage = () => {
         email: "",
         password: "",
     })
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -44,19 +44,22 @@ const LoginPage = () => {
 
             setLoading(true);
 
-            const { data } = await axios.post('http://127.0.0.1:8000/api/user/login', formData, config)
+
+            const { data } = await axios.post('api/user/login', formData, config)
 
             console.log(data);
             localStorage.setItem('UserInfo', JSON.stringify(data))
             setLoading(false);
+            setError('')
         } catch (error) {
-            setError(error.response.data.message);
+            setError(error.response.data);
+            setLoading(false)
         }
     }
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/40">
-            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {error && <ErrorMessage message={error}></ErrorMessage>}
             {loading && <LoadingSpinner />}
             <Card className="w-full max-w-sm">
                 <CardHeader>

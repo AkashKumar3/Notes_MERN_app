@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -7,16 +8,15 @@ import {
     NavigationMenuList,
     NavigationMenuLink,
     NavigationMenuContent,
-    NavigationMenuTrigger
+    NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Search, ChevronDown } from "lucide-react"
 
 export default function Navbar({ user }) {
-
+    const navigate = useNavigate()
     const [mobileProductsOpen, setMobileProductsOpen] = useState(false)
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState("")
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background">
@@ -31,18 +31,25 @@ export default function Navbar({ user }) {
                             <NavigationMenuItem>
                                 <NavigationMenuLink>MyNotes</NavigationMenuLink>
                             </NavigationMenuItem>
+
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>{user}</NavigationMenuTrigger>
                                 <NavigationMenuContent className="p-4 bg-white rounded-lg shadow-md">
                                     <div className="flex flex-col gap-2 w-24">
                                         <NavigationMenuLink>My Profile</NavigationMenuLink>
-                                        <NavigationMenuLink>Logout</NavigationMenuLink>
+                                        <NavigationMenuLink
+                                            onClick={() => {
+                                                localStorage.removeItem("UserInfo")
+                                                navigate("/")
+                                            }}
+                                        >
+                                            Logout
+                                        </NavigationMenuLink>
                                     </div>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
-
 
                     <div className="relative">
                         <Input
@@ -65,35 +72,34 @@ export default function Navbar({ user }) {
                         </SheetTrigger>
                         <SheetContent side="right">
                             <nav className="flex flex-col gap-4 mt-8">
+                                <button
+                                    onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                                    className="flex w-full items-center justify-between text-lg font-medium"
+                                >
+                                    Menu
+                                    <ChevronDown
+                                        className={`ml-2 h-4 w-4 transition-transform ${mobileProductsOpen ? "rotate-180" : ""
+                                            }`}
+                                    />
+                                </button>
 
-                                <a className="text-lg font-medium" href="#">Home</a>
-
-                                {/* Mobile Products Section */}
-                                <div>
-                                    <button
-                                        onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
-                                        className="flex w-full items-center justify-between text-lg font-medium"
-                                    >
-                                        Products
-                                        <ChevronDown
-                                            className={`ml-2 h-4 w-4 transition-transform ${mobileProductsOpen ? "rotate-180" : ""
-                                                }`}
-                                        />
-                                    </button>
-                                    {mobileProductsOpen && (
-                                        <div className="ml-4 mt-2 flex flex-col gap-2">
-                                            <a href="/profile" className="text-base">My profile</a>
-                                            <a href="/logout" className="text-base">Logout</a>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <a className="text-lg font-medium" href="#">Pricing</a>
+                                {mobileProductsOpen && (
+                                    <div className="ml-4 mt-2 flex flex-col gap-2">
+                                        <button onClick={() => navigate("/profile")}>My profile</button>
+                                        <button
+                                            onClick={() => {
+                                                localStorage.removeItem("UserInfo")
+                                                navigate("/")
+                                            }}
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
                             </nav>
                         </SheetContent>
                     </Sheet>
                 </div>
-
             </div>
         </header>
     )

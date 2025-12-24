@@ -42,7 +42,6 @@ export default function MainPage() {
     const [user, setUser] = useState('DEV');
     return (
         <>
-            <Navbar user={user} />
             <main className="container mx-auto max-w-4xl py-10 space-y-6">
                 {/* Header */}
                 <h1 className="text-4xl font-light text-center text-muted-foreground">
