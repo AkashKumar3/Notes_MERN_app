@@ -12,6 +12,8 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import axios from 'axios'
+import LoadingSpinner from '@/components/LoadingSpinner'
+import ErrorMessage from '@/components/ErrorMessage'
 
 const LoginPage = () => {
 
@@ -54,6 +56,8 @@ const LoginPage = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/40">
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            {loading && <LoadingSpinner />}
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle className="text-2xl">Login</CardTitle>
